@@ -79,14 +79,14 @@ function App() {
         (async () => {
             const conf = await read();
             setConf(conf);
-            document.body.style.setProperty("--font", conf.config.font);
+            document.body.style.setProperty("--font", conf.font);
             document.body.style.setProperty(
                 "--main-bg-color",
-                conf.config.theme.background
+                conf.theme.background
             );
             document.body.style.setProperty(
                 "--main-fg-color",
-                conf.config.theme.foreground
+                conf.theme.foreground
             );
         })();
     }, []);

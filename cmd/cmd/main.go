@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/btcsuite/btcutil/base58"
 	v8 "rogchap.com/v8go"
 )
 
@@ -76,7 +77,8 @@ func main() {
 	_, err = ctx.RunScript(content, "index.js") // will execute the Go callback with a single argunent 'foo'
 	errHandle(err)
 
-	cmd := exec.Command("yarn", "tauri", "dev", "\""+confStr(config)+"\"")
+	encoded := base58.Encode([]byte(confStr(config)))
+	cmd := exec.Command("tauri", "dev", "--", "-C", encoded)
 	fmt.Println(cmd.Args)
 	cmd.Run()
 }

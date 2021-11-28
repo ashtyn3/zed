@@ -16,6 +16,16 @@ import { EditorMain } from "./editor";
 type SaveDialog = {
     editor: EditorMain;
 };
+
+const doBind = (keys: Array<KeyboardEvent>, editor: EditorMain) => {
+    let path = "";
+    keys.forEach((k) => {
+        path += "-" + k.key;
+    });
+
+    console.log(path)
+};
+
 const keysFunc = (setState: any) => {
     const SaveDialog = ({ editor }: SaveDialog) => {
         useEffect(() => {
@@ -54,12 +64,19 @@ const keysFunc = (setState: any) => {
     const TabKey = Extension.create({
         name: "TabKey",
         addOptions() {
-            return { ...this.parent?.() };
+            return { ...this.parent?.(), keys: [] };
         },
         onCreate() {
+            document.addEventListener("keyup", (e) => {
+                this.storage.keys = [];
+            });
             document.addEventListener("keydown", (e) => {
                 if (e.key === "Tab") {
                     e.preventDefault();
+                } else {
+                    this.storage.keys.push(e);
+                    const editor = this.editor as EditorMain;
+                    doBind(this.storage.keys, editor);
                 }
             });
         },
@@ -118,7 +135,7 @@ const keysFunc = (setState: any) => {
                 },
                 "Mod-s": async ({ editor }: { editor: EditorMain }) => {
                     const conf = await read();
-                    if (conf.config.mode == "graphic") {
+                    if (conf.guiMode == "graphic") {
                         setState("Saving...");
 
                         let file = store.File.create({
@@ -139,23 +156,23 @@ const keysFunc = (setState: any) => {
                         setState(<SaveDialog editor={editor} />);
                     }
                 },
-                "Mod-p": async () => {
-                    const conf = await read();
-                    createWindow(
-                        "command",
-                        <Cmd config={conf} />,
-                        `50%`,
-                        "5px",
-                        "50%",
-                        "fit-content",
-                        {
-                            border: "none",
-                            transform: "translate(-50%)",
-                            zIndex: "100000",
-                        }
-                    );
-                    setState("Loading...");
-                },
+                //"Mod-p": async () => {
+                //   const conf = await read();
+                //  createWindow(
+                //     "command",
+                //    <Cmd config={conf} />,
+                //   `50%`,
+                //   "5px",
+                //   "50%",
+                //   "fit-content",
+                //   {
+                //       border: "none",
+                //       transform: "translate(-50%)",
+                //       zIndex: "100000",
+                //   }
+                //);
+                //setState("Loading...");
+                //},
             };
         },
     });

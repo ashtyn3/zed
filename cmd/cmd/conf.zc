@@ -2,4 +2,4 @@ for (let i = 0; i < 5; i++) {
     print("Hello world")
 }
 
-set_theme({background: "orange"})
+set_theme({background: "blue"})

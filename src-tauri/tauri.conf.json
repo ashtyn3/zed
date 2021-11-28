@@ -7,13 +7,13 @@
         "distDir": "../dist",
         "devPath": "http://localhost:3000",
         "beforeDevCommand": "yarn dev",
-        "beforeBuildCommand": "yarn build"
+        "beforeBuildCommand": "yarn vite build"
     },
     "tauri": {
         "cli": {
             "description": "Zed client",
             "longDescription": "The zed executable that runs the Zed editor.",
-            "args": [{"name": "config", "index": 1}],
+            "args": [{ "name": "config","short": "C", "takesValue": true }],
             "subcommands": {}
         },
 
