@@ -14,6 +14,8 @@ export const EditBody = ({ editor, title }: EditBody) => {
         <div className="">
             <div
                 contentEditable="true"
+                className="title-input"
+                placeholder="Name here"
                 onInput={(e) => {
                     const input = e.target as HTMLElement;
                     editor.title = input.innerText;

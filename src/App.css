@@ -1,6 +1,6 @@
 * {
     font-smooth: always;
-        }
+}
 .status-label {
     width: 100%;
     display: grid;
@@ -32,4 +32,14 @@
     min-height: 80vh;
     max-height: 80vh;
     overflow: scroll;
+}
+
+.title-input {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.title-input:empty:before {
+    content: attr(placeholder);
+    color: #555;
 }
