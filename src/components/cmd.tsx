@@ -15,7 +15,7 @@ const commander = async (
         document.location.reload();
     }
     if (cmd == "c" || cmd == "config") {
-                        dialog.style.setProperty("border", "1px solid black");
+        dialog.style.setProperty("border", "1px solid black");
         set(JSON.stringify(config));
     }
     if (cmd.startsWith("o") || cmd.startsWith("open")) {
@@ -104,6 +104,9 @@ export const Cmd = ({ config, value, text }: Cmd) => {
                     border: "none",
                     borderBottom: "1px solid black",
                     outline: "none",
+                    background: "var(--cmd-bg-color)",
+                    color: "var(--cmd-fg-color)",
+                    ...config.cmd_theme.styles,
                 }}
             />
         </div>

@@ -35,9 +35,13 @@ func confStr(config *Config) string {
 }
 
 type Config struct {
-	Theme   *themePair `json:"theme"`
-	Font    string     `json:"font"`
-	GuiMode string     `json:"guiMode"`
+	Theme    *themePair `json:"theme"`
+	CmdTheme struct {
+		Theme  *themePair `json:"theme"`
+		Styles []string   `json:"styles"`
+	} `json:"cmd_theme"`
+	Font    string `json:"font"`
+	GuiMode string `json:"guiMode"`
 }
 
 func main() {
@@ -72,10 +76,29 @@ func main() {
 		}
 		return nil
 	})
+	setCmdThemefn, _ := v8.NewFunctionTemplate(iso, func(info *v8.FunctionCallbackInfo) *v8.Value {
+		arg := info.Args()[0]
+		if arg.IsObject() {
+			var theme *themePair = toThemePair(arg)
+			config.CmdTheme.Theme = theme
+		} else {
+			fmt.Println("e: Expected object with values background and foreground")
+			fmt.Printf("\t- %v\n", arg)
+		}
+		prop := []string{}
+		if len(info.Args()) > 1 {
+			for _, s := range info.Args()[1:] {
+				prop = append(prop, s.String())
+			}
+		}
+		config.CmdTheme.Styles = prop
+		return nil
+	})
 
 	global, _ := v8.NewObjectTemplate(iso)
 	global.Set("print", printfn)
 	global.Set("set_theme", setThemefn)
+	global.Set("set_cmd_theme", setCmdThemefn)
 	global.Set("set_gui_mode", setModefn)
 	ctx, _ := v8.NewContext(iso, global)
 

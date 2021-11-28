@@ -1,2 +1,3 @@
 set_gui_mode("text")
 set_theme({background: "white"})
+set_cmd_theme({background: "white", foreground: "black grey"}, [])

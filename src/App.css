@@ -43,3 +43,7 @@
     content: attr(placeholder);
     color: #555;
 }
+
+.cmd::placeholder {
+    color: var(--cmd-fg2-color)
+}

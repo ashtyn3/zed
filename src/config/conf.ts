@@ -8,48 +8,48 @@ export interface themePair {
 
 export interface Config {
     theme?: themePair;
+    cmd_theme?: {
+        theme: themePair;
+        styles: any;
+    };
     font: string;
     guiMode: "graphic" | "text";
 }
 
-const propertiesToArray = (obj: any) => {
-    const isObject = (val: any) =>
-        typeof val === "object" && !Array.isArray(val);
-
-    const addDelimiter = (a: any, b: any) => (a ? `${a}.${b}` : b);
-
-    const paths = (obj = {}, head = "") => {
-        return Object.entries(obj).reduce((product, [key, value]) => {
-            let fullPath = addDelimiter(head, key);
-            return isObject(value)
-                ? product.concat(paths(value, fullPath))
-                : product.concat(fullPath);
-        }, []);
-    };
-
-    return paths(obj);
-};
-const nestedString = (index: string, obj: any, pointer: boolean) => {
-    let base = obj;
-    let path = [];
-    index.split(/\.(\w+)/).forEach((e) => {
-        if (e == "") {
-            base = obj;
-            return;
+function MergeRecursive(obj1, obj2) {
+    for (var p in obj2) {
+        try {
+            // Property in destination object set; update its value.
+            if (obj2[p].constructor == Object) {
+                obj1[p] = MergeRecursive(obj1[p], obj2[p]);
+            } else {
+                if (obj2[p] != "") {
+                    obj1[p] = obj2[p];
+                }
+            }
+        } catch (e) {
+            // Property in destination object not set; create it and set its value.
+            if (obj2[p] != "") {
+                obj1[p] = obj2[p];
+            }
         }
-        base = base[e];
-        path.push(base);
-    });
-    if (pointer) {
-        return path[0];
     }
-    return path[path.length - 1];
-};
+
+    return obj1;
+}
+
 export const read = async (): Promise<Config> => {
     let defConfig: Config = {
         theme: {
             background: "white",
             foreground: "black",
+        },
+        cmd_theme: {
+            theme: {
+                background: "white",
+                foreground: "black",
+            },
+            styles: [],
         },
         font: "Inter",
         guiMode: "graphic",
@@ -60,25 +60,16 @@ export const read = async (): Promise<Config> => {
     const configStr = configBytes.toString("utf-8");
     if (encConf) {
         let obj: Config = JSON.parse(configStr);
-        let props: Array<string> = propertiesToArray(obj);
-        let defProps: Array<string> = propertiesToArray(defConfig);
+        const newDefConfig: Config = MergeRecursive(defConfig, obj);
+        const styles = {};
+        newDefConfig.cmd_theme.styles.forEach((e) => {
+            const name = e.split(":")[0];
+            const body = e.split(":")[1];
 
-        defProps.forEach((p2) => {
-            let defv = nestedString(p2, defConfig, true);
-            props.forEach((p) => {
-                if (p.match(/(\w+)\.(\w+)/)) {
-                    let v = nestedString(p, obj, false);
-                    let list = p2.split(".");
-                    if (defv[list[list.length - 1]] && v != "" && p == p2) {
-                        defv[list[list.length - 1]] = v;
-                    }
-                    return;
-                }
-                if (obj[p] != "") {
-                    defConfig[p] = obj[p];
-                }
-            });
+            styles[name] = body;
         });
+        newDefConfig.cmd_theme.styles = styles;
+        defConfig = newDefConfig;
     }
 
     return defConfig;

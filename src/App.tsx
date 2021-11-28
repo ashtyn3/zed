@@ -88,6 +88,18 @@ function App() {
                 "--main-fg-color",
                 conf.theme.foreground
             );
+            document.body.style.setProperty(
+                "--cmd-bg-color",
+                conf.cmd_theme.theme.background
+            );
+            document.body.style.setProperty(
+                "--cmd-fg-color",
+                conf.cmd_theme.theme.foreground.split(" ")[0]
+            );
+            document.body.style.setProperty(
+                "--cmd-fg2-color",
+                conf.cmd_theme.theme.foreground.split(" ")[1]
+            );
         })();
     }, []);
 
