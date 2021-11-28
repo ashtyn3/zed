@@ -22,6 +22,7 @@ const commander = async (
         const rawPath = cmd.split(" ")[1].trim() + ".zedx";
         const path = await resolve(rawPath);
         localStorage.setItem("path", path);
+        window.location.reload();
     }
 };
 type Cmd = {
