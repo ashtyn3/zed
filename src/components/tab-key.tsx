@@ -2,6 +2,7 @@ import "@tiptap/extension-text-style";
 
 import * as dialog from "@tauri-apps/api/dialog";
 import * as fs from "@tauri-apps/api/fs";
+import * as path from "@tauri-apps/api/path";
 import { Extension, Editor } from "@tiptap/core";
 import * as pako from "pako";
 import React, { useEffect } from "react";
@@ -18,26 +19,40 @@ type SaveDialog = {
     editor: EditorMain;
 };
 
-hotkeys.filter = function(event){
-  return true;
-}
+hotkeys.filter = function () {
+    return true;
+};
+const createCmd = async (setState: any, { value, text }: any) => {
+    const conf = await read();
+    createWindow(
+        "command",
+        <Cmd config={conf} value={value} text={text} />,
+        `50%`,
+        "5px",
+        "50%",
+        "fit-content",
+        {
+            border: "none",
+            transform: "translate(-50%)",
+            zIndex: "100000",
+        }
+    );
+    setState("Loading...");
+    return conf;
+};
 const bindings = {
-    "ctrl+p": async (editor: EditorMain, setState: any) => {
+    "ctrl+p": async (_: EditorMain, setState: any) => {
+        createCmd(setState, {});
+    },
+    "ctrl+o": async (_: EditorMain, setState: any) => {
         const conf = await read();
-        createWindow(
-            "command",
-            <Cmd config={conf} />,
-            `50%`,
-            "5px",
-            "50%",
-            "fit-content",
-            {
-                border: "none",
-                transform: "translate(-50%)",
-                zIndex: "100000",
-            }
-        );
-        setState("Loading...");
+        const dir = await path.currentDir()
+        if (conf.guiMode == "text") {
+            createCmd(setState, {
+                value: "o ",
+                text: <p>{dir}</p>,
+            });
+        }
     },
 };
 
@@ -83,13 +98,9 @@ const keysFunc = (setState: any) => {
         },
         onCreate() {
             let editor = this.editor as EditorMain;
-            hotkeys("ctrl+p", function (_, handler) {
-                switch (handler.key) {
-                    case "ctrl+p":
-                        console.log(handler.key);
-                        bindings[handler.key](editor, setState);
-                        break;
-                }
+            hotkeys("ctrl+p, ctrl+o", function (_, handler) {
+                console.log(handler.key);
+                bindings[handler.key](editor, setState);
             });
         },
         addKeyboardShortcuts(): any {

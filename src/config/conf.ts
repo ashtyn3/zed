@@ -9,7 +9,7 @@ export interface themePair {
 export interface Config {
     theme?: themePair;
     font: string;
-    guiMode: string;
+    guiMode: "graphic" | "text";
 }
 
 const propertiesToArray = (obj: any) => {

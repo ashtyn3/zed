@@ -64,10 +64,19 @@ func main() {
 		}
 		return nil
 	})
+	setModefn, _ := v8.NewFunctionTemplate(iso, func(info *v8.FunctionCallbackInfo) *v8.Value {
+		arg := info.Args()[0]
+		if arg.IsString() {
+			mode := arg.String()
+			config.GuiMode = mode
+		}
+		return nil
+	})
 
 	global, _ := v8.NewObjectTemplate(iso)
 	global.Set("print", printfn)
 	global.Set("set_theme", setThemefn)
+	global.Set("set_gui_mode", setModefn)
 	ctx, _ := v8.NewContext(iso, global)
 
 	conf, err := os.ReadFile("./conf.zc")

@@ -1,1 +1,2 @@
+set_gui_mode("text")
 set_theme({background: "white"})
