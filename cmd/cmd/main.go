@@ -79,6 +79,6 @@ func main() {
 
 	encoded := base58.Encode([]byte(confStr(config)))
 	cmd := exec.Command("tauri", "dev", "--", "-C", encoded)
-	fmt.Println(cmd.Args)
+	fmt.Println("Running zed...")
 	cmd.Run()
 }

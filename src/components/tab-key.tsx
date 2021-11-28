@@ -5,6 +5,7 @@ import * as fs from "@tauri-apps/api/fs";
 import { Extension, Editor } from "@tiptap/core";
 import * as pako from "pako";
 import React, { useEffect } from "react";
+import hotkeys from "hotkeys-js";
 
 import { read } from "../config/conf";
 import * as store from "../store/store_pb";
@@ -17,13 +18,27 @@ type SaveDialog = {
     editor: EditorMain;
 };
 
-const doBind = (keys: Array<KeyboardEvent>, editor: EditorMain) => {
-    let path = "";
-    keys.forEach((k) => {
-        path += "-" + k.key;
-    });
-
-    console.log(path)
+hotkeys.filter = function(event){
+  return true;
+}
+const bindings = {
+    "ctrl+p": async (editor: EditorMain, setState: any) => {
+        const conf = await read();
+        createWindow(
+            "command",
+            <Cmd config={conf} />,
+            `50%`,
+            "5px",
+            "50%",
+            "fit-content",
+            {
+                border: "none",
+                transform: "translate(-50%)",
+                zIndex: "100000",
+            }
+        );
+        setState("Loading...");
+    },
 };
 
 const keysFunc = (setState: any) => {
@@ -67,16 +82,13 @@ const keysFunc = (setState: any) => {
             return { ...this.parent?.(), keys: [] };
         },
         onCreate() {
-            document.addEventListener("keyup", (e) => {
-                this.storage.keys = [];
-            });
-            document.addEventListener("keydown", (e) => {
-                if (e.key === "Tab") {
-                    e.preventDefault();
-                } else {
-                    this.storage.keys.push(e);
-                    const editor = this.editor as EditorMain;
-                    doBind(this.storage.keys, editor);
+            let editor = this.editor as EditorMain;
+            hotkeys("ctrl+p", function (_, handler) {
+                switch (handler.key) {
+                    case "ctrl+p":
+                        console.log(handler.key);
+                        bindings[handler.key](editor, setState);
+                        break;
                 }
             });
         },
