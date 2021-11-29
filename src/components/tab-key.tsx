@@ -14,6 +14,7 @@ import * as store from "../store/store_pb";
 import { Cmd } from "./cmd";
 import { createWindow } from "./wm";
 import { EditorMain } from "./editor";
+import { commander } from "../command/cmd";
 
 type SaveDialog = {
     editor: EditorMain;
@@ -46,12 +47,15 @@ const bindings = {
     },
     "ctrl+o": async (_: EditorMain, setState: any) => {
         const conf = await read();
-        const dir = await path.currentDir()
+        const dir = await path.currentDir();
         if (conf.guiMode == "text") {
             createCmd(setState, {
                 value: "o ",
                 text: <p>{dir}</p>,
             });
+        } else {
+            const path = await dialog.open() as string;
+            commander("o " + path.split(".zedx")[0], null, conf, null);
         }
     },
 };

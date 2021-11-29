@@ -3,7 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { removeWindow } from "./wm";
 import { Config } from "../config/conf";
 import { readDir } from "@tauri-apps/api/fs";
-import { commander } from "../command/cmd"
+import { resolve } from "@tauri-apps/api/path";
+import { commander } from "../command/cmd";
 
 type Cmd = {
     config: Config;
@@ -11,9 +12,10 @@ type Cmd = {
     text?: JSX.Element;
 };
 
+
 export const Cmd = ({ config, value, text }: Cmd) => {
-    const commandPrompt = useRef() as React.MutableRefObject<HTMLInputElement>;
     const dialog = useRef<HTMLDivElement>();
+    const commandPrompt = useRef() as React.MutableRefObject<HTMLInputElement>;
     const [results, setRes] = useState(null);
 
     useEffect(() => {

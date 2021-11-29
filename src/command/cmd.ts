@@ -1,8 +1,11 @@
+import { resolve } from "@tauri-apps/api/path";
+import { Config } from "../config/conf";
+
 export const commander = async (
     cmd: string,
     dialog: HTMLDivElement,
     config: Config,
-    set: any
+    set?: any
 ) => {
     if (cmd == "r" || cmd == "reload") {
         document.location.reload();
