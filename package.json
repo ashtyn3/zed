@@ -1,0 +1,38 @@
+{
+  "name": "zed",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
+    "@tsconfig/svelte": "^2.0.1",
+    "svelte": "^3.44.0",
+    "svelte-check": "^2.2.7",
+    "svelte-preprocess": "^4.9.8",
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.1"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.0.0-beta.8",
+    "@tiptap/core": "^2.0.0-beta.143",
+    "@tiptap/extension-placeholder": "^2.0.0-beta.45",
+    "@tiptap/extension-text-style": "^2.0.0-beta.23",
+    "@tiptap/starter-kit": "^2.0.0-beta.145",
+    "@types/pako": "^1.0.2",
+    "bs58": "^4.0.1",
+    "buffer": "^6.0.3",
+    "csstype": "^3.0.10",
+    "hotkeys-js": "^3.8.7",
+    "pako": "^2.0.4",
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "sirv-cli": "^1.0.0",
+    "svelecte": "^3.4.0",
+    "svelte-select": "^4.4.6"
+  }
+}

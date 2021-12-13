@@ -1,0 +1,2 @@
+set_theme({background: "#34eb89", foreground: "black"}, [])
+set_cmd_theme(["color: green"], ["color: red"], ["color: purple"])

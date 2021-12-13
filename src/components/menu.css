@@ -1,0 +1,48 @@
+.btn-nav {
+    display: flex;
+    justify-content: space-evenly;
+    position: fixed;
+    bottom: 0;
+    margin-bottom: 50px;
+    left: 50%;
+    transform: translate(-50%);
+    background: #181818;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    padding: 5px;
+    font-family: var(--font);
+}
+
+.btn-nav button {
+    border: solid black 0px;
+    background: transparent;
+    color: white;
+    font-size: 16px;
+    font-family: var(--font);
+    margin: 0;
+    padding: 10px;
+}
+
+.selectContainer {
+    background: #181818 !important;
+    border: none !important;
+    color: white;
+}
+.selectedItem {
+    padding: 0 !important;
+    background: #181818;
+}
+
+.listContainer {
+    color: white;
+    background: #181818 !important;
+    width: max-content !important;
+    margin-bottom: 5px;
+}
+
+.listItem .hover {
+    background: #454545 !important;
+}
+.listItem .active {
+    background: #454545 !important;
+}
