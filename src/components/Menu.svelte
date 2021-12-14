@@ -69,6 +69,11 @@
                     transform: false,
                 };
             });
+            if (editor.getAttributes("heading").level == 1) {
+                sizeVar.update(() => {
+                    return { label: `24`, value: `24pt`, transform: true };
+                });
+            }
         } else {
             if (editor.getAttributes("heading").level == 1) {
                 sizeVar.update(() => {
